@@ -1,13 +1,3 @@
-function welcome(name: string) {
-    console.log(`Welcome ${name}`);
+import { Config } from "./config";
 
-    const player = {
-        name: "Ghost",
-    };
-
-    const fname = player.name;
-
-    return fname;
-}
-
-welcome("ghost");
+console.log(Config.PORT);
