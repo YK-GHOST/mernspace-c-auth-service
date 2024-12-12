@@ -9,7 +9,8 @@
         "format:check": "prettier . --check",
         "lint:check": "eslint . ",
         "lint:fix": "eslint . --fix",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "prepare": "husky"
     },
     "author": "Yogesh kantiwal <yogeshkantiwal20@gmail.com>",
     "license": "ISC",
@@ -18,8 +19,16 @@
         "@types/eslint__js": "^8.42.3",
         "@types/node": "^22.10.2",
         "eslint": "^9.16.0",
+        "husky": "^9.1.7",
+        "lint-staged": "^15.2.11",
         "prettier": "3.4.2",
         "typescript": "^5.7.2",
         "typescript-eslint": "^8.18.0"
+    },
+    "lint-staged": {
+        "*.ts": [
+            "npm run format:fix",
+            "npm run lint:fix"
+        ]
     }
 }
