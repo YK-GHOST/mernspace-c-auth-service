@@ -17,7 +17,7 @@ export class UserService {
         } catch (err) {
             const error = createHttpError(
                 500,
-                `Failed to store user in the database. ${err.message}`,
+                `Failed to store the data in the database. Error: ${err.message}`,
             );
             throw error;
         }
