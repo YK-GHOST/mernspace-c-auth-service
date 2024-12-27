@@ -1,4 +1,5 @@
 import { Repository } from "typeorm";
+import bcrypt from "bcrypt";
 import { User } from "../entity/User";
 import { UserData } from "../types";
 import createHttpError from "http-errors";
@@ -8,12 +9,16 @@ export class UserService {
     constructor(private userRepository: Repository<User>) {}
 
     async create({ firstName, lastName, email, password }: UserData) {
+        //Hash the password
+        const SALT_ROUNDS = 10;
+        const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+
         try {
             return await this.userRepository.save({
                 firstName,
                 lastName,
                 email,
-                password,
+                password: hashedPassword,
                 role: Roles.CUSTOMER,
             });
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
