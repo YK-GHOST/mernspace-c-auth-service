@@ -12,6 +12,8 @@ export default tseslint.config(
             "node_modules",
             "eslint.config.mjs",
             "jest.config.js",
+            "tests",
+            "**/*.spec.ts",
         ],
     },
     {
@@ -19,6 +21,7 @@ export default tseslint.config(
             parserOptions: {
                 projectService: true,
                 tsconfigRootDir: import.meta.dirname,
+                extraFileExtensions: [".mjs"],
             },
         },
 
