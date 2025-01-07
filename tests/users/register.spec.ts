@@ -5,6 +5,7 @@ import { AppDataSource } from "../../src/config/data-source";
 import { User } from "../../src/entity/User";
 import { Roles } from "../../src/constants";
 import { isJWT } from "../utils";
+import { RefreshToken } from "../../src/entity/RefreshToken";
 
 describe("POST /auth/register", () => {
     let connection: DataSource;
@@ -212,6 +213,34 @@ describe("POST /auth/register", () => {
             expect(refreshToken).not.toBe(null);
             expect(isJWT(accessToken)).toBeTruthy();
             expect(isJWT(refreshToken)).toBeTruthy();
+        });
+
+        it("should store the refreshToken in the database.", async () => {
+            //Arrange
+            const userData = {
+                firstName: "Yogesh",
+                lastName: "Kantiwal",
+                email: "yogesh@gmail.com",
+                password: "password",
+            };
+
+            //Act
+            const response = await request(app)
+                .post("/auth/register")
+                .send(userData);
+
+            //Assert
+            const refreshTokenRepo = connection.getRepository(RefreshToken);
+            const refreshTokens = await refreshTokenRepo.find();
+            const tokens = await refreshTokenRepo
+                .createQueryBuilder("refreshToken")
+                .where("refreshToken.userId = :userId", {
+                    userId: response.body.id,
+                })
+                .getMany();
+
+            expect(refreshTokens).toHaveLength(1);
+            expect(tokens).toHaveLength(1);
         });
     });
     describe("Fields are missing", () => {
