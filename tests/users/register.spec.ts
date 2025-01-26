@@ -48,7 +48,7 @@ describe("POST /auth/register", () => {
             expect(response.statusCode).toBe(201);
         });
 
-        it("should return valid JSON resonse", async () => {
+        it("should return valid JSON response", async () => {
             //Arrange -> Arrange the data needed for the test
             const userData = {
                 firstName: "Yogesh",
