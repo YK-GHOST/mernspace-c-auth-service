@@ -18,3 +18,10 @@ export interface RegisterUserRequest extends Request {
 export interface LoginUserRequest extends Request {
     body: UserDataLogin;
 }
+
+export interface AuthRequest extends Request {
+    auth: {
+        sub: string;
+        role: number;
+    };
+}
