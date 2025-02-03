@@ -117,5 +117,31 @@ describe("GET /auth/self", () => {
                 "password",
             );
         });
+        it("should return 401 status code if token does not exist.", async () => {
+            //Arrange
+            /**1.Register the user.
+             * 2. Generate Token.
+             * 3. Add token to cookie.
+             */
+            const userData = {
+                firstName: "Yogesh",
+                lastName: "Kantiwal",
+                email: "yogesh@gmail.com",
+                password: "password",
+            };
+
+            const userRepository = connection.getRepository(User);
+            const data = await userRepository.save({
+                ...userData,
+                role: Roles.CUSTOMER,
+            });
+
+            //Act
+            const response = await request(app).get("/auth/self").send();
+
+            //Assert
+            //Check if user id matches with registered user.
+            expect(response.statusCode).toBe(401);
+        });
     });
 });
