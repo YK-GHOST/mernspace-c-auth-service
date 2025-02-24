@@ -193,22 +193,27 @@ export class AuthController {
                 id: String(newRefreshToken.id),
             });
 
-            res.cookie("accessToken", accessToken, {
-                domain: "localhost",
-                sameSite: "strict",
-                maxAge: 1000 * 60 * 60,
-                httpOnly: true,
-            });
-            res.cookie("refreshToken", refreshToken, {
-                domain: "localhost",
-                sameSite: "strict",
-                maxAge: 1000 * 60 * 60 * 24 * 365,
-                httpOnly: true,
-            });
+            this.setCookies(res, accessToken, refreshToken);
 
             this.logger.info("User has been logged in", { id: user.id });
 
             res.status(200).json({ id: user.id });
+        } catch (err) {
+            next(err);
+            return;
+        }
+    }
+
+    async logout(req: AuthRequest, res: Response, next: NextFunction) {
+        try {
+            await this.tokenService.deleteRefreshToken(Number(req.auth.id));
+            this.logger.info("Refresh token has been deleted.", {
+                id: req.auth.id,
+            });
+            this.logger.info("User has been logged out.", { id: req.auth.sub });
+            res.clearCookie("accessToken");
+            res.clearCookie("refreshToken");
+            res.json({});
         } catch (err) {
             next(err);
             return;
