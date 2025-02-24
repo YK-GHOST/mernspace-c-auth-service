@@ -17,6 +17,25 @@ export class AuthController {
         private credentialService: CredentialService,
     ) {}
 
+    private setCookies(
+        res: Response,
+        accessToken: string,
+        refreshToken: string,
+    ) {
+        res.cookie("accessToken", accessToken, {
+            domain: "localhost",
+            sameSite: "strict",
+            maxAge: 1000 * 60 * 60,
+            httpOnly: true,
+        });
+        res.cookie("refreshToken", refreshToken, {
+            domain: "localhost",
+            sameSite: "strict",
+            maxAge: 1000 * 60 * 60 * 24 * 365,
+            httpOnly: true,
+        });
+    }
+
     async register(
         req: RegisterUserRequest,
         res: Response,
@@ -61,18 +80,8 @@ export class AuthController {
                 id: String(newRefreshToken.id),
             });
 
-            res.cookie("accessToken", accessToken, {
-                domain: "localhost",
-                sameSite: "strict",
-                maxAge: 1000 * 60 * 60,
-                httpOnly: true,
-            });
-            res.cookie("refreshToken", refreshToken, {
-                domain: "localhost",
-                sameSite: "strict",
-                maxAge: 1000 * 60 * 60 * 24 * 365,
-                httpOnly: true,
-            });
+            this.setCookies(res, accessToken, refreshToken);
+
             res.status(201).json({ id: user.id });
         } catch (err) {
             next(err);
@@ -135,18 +144,7 @@ export class AuthController {
                 id: String(newRefreshToken.id),
             });
 
-            res.cookie("accessToken", accessToken, {
-                domain: "localhost",
-                sameSite: "strict",
-                maxAge: 1000 * 60 * 60,
-                httpOnly: true,
-            });
-            res.cookie("refreshToken", refreshToken, {
-                domain: "localhost",
-                sameSite: "strict",
-                maxAge: 1000 * 60 * 60 * 24 * 365,
-                httpOnly: true,
-            });
+            this.setCookies(res, accessToken, refreshToken);
 
             this.logger.info("User has been logged in", { id: user.id });
 
