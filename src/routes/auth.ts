@@ -33,6 +33,7 @@ router.post(
     (req: Request, res: Response, next: NextFunction) =>
         authController.register(req, res, next),
 );
+
 router.post(
     "/login",
     loginValidator,

@@ -12,7 +12,9 @@
         "test": "jest --watch --runInBand",
         "prepare": "husky",
         "start": "ts-node src/index.ts",
-        "typeorm": "typeorm-ts-node-commonjs"
+        "migration:generate": "typeorm-ts-node-esm migration:generate",
+        "migration:run": "typeorm-ts-node-esm migration:run",
+        "migration:create": "typeorm-ts-node-esm migration:create"
     },
     "author": "Yogesh kantiwal <yogeshkantiwal20@gmail.com>",
     "license": "ISC",
