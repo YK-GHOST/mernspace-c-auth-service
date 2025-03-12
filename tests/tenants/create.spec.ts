@@ -44,7 +44,7 @@ describe("POST /tenants", () => {
             const response = await request(app)
                 .post("/tenants")
                 .set("Cookie", [`accessToken=${adminToken}`])
-                .send({ tenantData });
+                .send(tenantData);
             expect(response.statusCode).toBe(201);
         });
         it("should create a tenant in the database.", async () => {
@@ -93,6 +93,60 @@ describe("POST /tenants", () => {
 
             expect(response.statusCode).toBe(403);
             expect(tenants).toHaveLength(0);
+        });
+    });
+    describe("Fields are missing", () => {
+        it("should return 400 if tenant name is missing.", async () => {
+            const tenantData = {
+                name: "",
+                address: "Address 1",
+            };
+
+            const response = await request(app)
+                .post("/tenants")
+                .set("Cookie", [`accessToken=${adminToken}`])
+                .send(tenantData);
+
+            const tenantRepository = connection.getRepository(Tenant);
+            const tenants = await tenantRepository.find();
+
+            expect(response.statusCode).toBe(400);
+            expect(tenants).toHaveLength(0);
+        });
+        it("should return 400 if tenant address is missing.", async () => {
+            const tenantData = {
+                name: "Tenant 1",
+                address: "",
+            };
+
+            const response = await request(app)
+                .post("/tenants")
+                .set("Cookie", [`accessToken=${adminToken}`])
+                .send(tenantData);
+            const tenantRepository = connection.getRepository(Tenant);
+            const tenants = await tenantRepository.find();
+
+            expect(response.statusCode).toBe(400);
+            expect(tenants).toHaveLength(0);
+        });
+    });
+    describe("Fields are not in proper format", () => {
+        it("should trim the name and address field.", async () => {
+            const tenantData = {
+                name: " Tenant ",
+                address: " Address ",
+            };
+
+            await request(app)
+                .post("/tenants")
+                .set("Cookie", [`accessToken=${adminToken}`])
+                .send(tenantData);
+
+            const tenantRepository = connection.getRepository(Tenant);
+            const tenants = await tenantRepository.find();
+
+            expect(tenants[0].name).toBe("Tenant");
+            expect(tenants[0].address).toBe("Address");
         });
     });
 });
