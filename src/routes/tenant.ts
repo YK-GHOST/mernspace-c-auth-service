@@ -32,4 +32,21 @@ router.get(
         tenantController.getOne(req, res, next),
 );
 
+router.patch(
+    "/:id",
+    authenticate,
+    tenantValidator,
+    isAuthorize([Roles.ADMIN]),
+    (req: Request, res: Response, next: NextFunction) =>
+        tenantController.update(req, res, next),
+);
+
+router.delete(
+    "/:id",
+    authenticate,
+    isAuthorize([Roles.ADMIN]),
+    (req: Request, res: Response, next: NextFunction) =>
+        tenantController.deleteOne(req, res, next),
+);
+
 export default router;

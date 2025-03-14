@@ -29,6 +29,30 @@ export class TenantController {
         }
     }
 
+    async update(req: CreateTenantRequest, res: Response, next: NextFunction) {
+        const result = validationResult(req);
+        if (!result.isEmpty()) {
+            res.status(400).json({ error: result.array() });
+            return;
+        }
+        const { name, address } = req.body;
+        const tenantId = req.params.id;
+
+        if (isNaN(Number(tenantId))) {
+            next(createHttpError(400, "Invalid url param."));
+            return;
+        }
+        try {
+            await this.tenantService.update(Number(tenantId), {
+                name,
+                address,
+            });
+            res.json({ id: Number(tenantId) });
+        } catch (err) {
+            next(err);
+        }
+    }
+
     async getOne(req: Request, res: Response, next: NextFunction) {
         const tenantId = req.params.id;
         if (isNaN(Number(tenantId))) {
@@ -46,6 +70,20 @@ export class TenantController {
 
             this.logger.info("Tenant has been fetched");
             res.json(tenant);
+        } catch (err) {
+            next(err);
+        }
+    }
+
+    async deleteOne(req: Request, res: Response, next: NextFunction) {
+        const tenantId = req.params.id;
+        if (!tenantId) {
+            next(createHttpError(400, "Invalid URL param."));
+            return;
+        }
+        try {
+            await this.tenantService.deleteById(Number(tenantId));
+            res.json({ id: tenantId });
         } catch (err) {
             next(err);
         }
