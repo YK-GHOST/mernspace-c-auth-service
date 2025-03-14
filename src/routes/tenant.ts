@@ -24,4 +24,12 @@ router.post(
         tenantController.create(req, res, next),
 );
 
+router.get(
+    "/:id",
+    authenticate,
+    isAuthorize([Roles.ADMIN]),
+    (req: Request, res: Response, next: NextFunction) =>
+        tenantController.getOne(req, res, next),
+);
+
 export default router;
