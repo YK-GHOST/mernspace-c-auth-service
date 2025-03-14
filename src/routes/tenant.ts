@@ -8,6 +8,7 @@ import authenticate from "../middlewares/authenticate";
 import { isAuthorize } from "../middlewares/isAuthorize";
 import { Roles } from "../constants";
 import tenantValidator from "../validators/tenant-validator";
+import listTenantsValidator from "../validators/list-tenants-validator";
 
 const router = express.Router();
 
@@ -22,6 +23,15 @@ router.post(
     isAuthorize([Roles.ADMIN]),
     (req: Request, res: Response, next: NextFunction) =>
         tenantController.create(req, res, next),
+);
+
+router.get(
+    "/",
+    authenticate,
+    listTenantsValidator,
+    isAuthorize([Roles.ADMIN]),
+    (req: Request, res: Response, next: NextFunction) =>
+        tenantController.getAll(req, res, next),
 );
 
 router.get(
