@@ -5,7 +5,6 @@ import {
     UpdateUserRequest,
     UserQueryParams,
 } from "../types";
-import { Roles } from "../constants";
 import { Logger } from "winston";
 import { matchedData, validationResult } from "express-validator";
 import createHttpError from "http-errors";
@@ -16,7 +15,8 @@ export class UserController {
         private logger: Logger,
     ) {}
     async create(req: CreateUserRequest, res: Response, next: NextFunction) {
-        const { firstName, lastName, email, password } = req.body;
+        const { firstName, lastName, email, password, tenantId, role } =
+            req.body;
 
         try {
             const user = await this.userService.create({
@@ -24,7 +24,8 @@ export class UserController {
                 lastName,
                 email,
                 password,
-                role: Roles.MANAGER,
+                role,
+                tenantId,
             });
             res.status(201).json({ id: user.id });
         } catch (err) {

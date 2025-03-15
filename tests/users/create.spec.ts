@@ -5,6 +5,8 @@ import { AppDataSource } from "../../src/config/data-source";
 import app from "../../src/app";
 import { User } from "../../src/entity/User";
 import { Roles } from "../../src/constants";
+import { createTenant } from "../utils";
+import { Tenant } from "../../src/entity/Tenant";
 
 describe("GET /auth/self", () => {
     let connection: DataSource;
@@ -38,17 +40,21 @@ describe("GET /auth/self", () => {
              * 2. Generate Token.
              * 3. Add token to cookie.
              */
+            const tenant = await createTenant(connection.getRepository(Tenant));
+
             const adminToken = jwks.token({
                 sub: "1",
                 role: Roles.ADMIN,
             });
 
+            // Register user
             const userData = {
                 firstName: "Yogesh",
                 lastName: "Kantiwal",
                 email: "yogesh@gmail.com",
                 password: "password",
-                tenantId: 1,
+                tenantId: tenant.id,
+                role: Roles.MANAGER,
             };
 
             //Act
@@ -66,6 +72,8 @@ describe("GET /auth/self", () => {
         });
         it("should create a manager type user.", async () => {
             //Arrange
+            const tenant = await createTenant(connection.getRepository(Tenant));
+
             const adminToken = jwks.token({
                 sub: "1",
                 role: Roles.ADMIN,
@@ -76,7 +84,8 @@ describe("GET /auth/self", () => {
                 lastName: "Kantiwal",
                 email: "yogesh@gmail.com",
                 password: "password",
-                tenantId: 1,
+                tenantId: tenant.id,
+                role: Roles.MANAGER,
             };
 
             //Act
