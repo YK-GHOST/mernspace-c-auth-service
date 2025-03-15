@@ -27,9 +27,7 @@ router.post(
 
 router.get(
     "/",
-    authenticate,
     listTenantsValidator,
-    isAuthorize([Roles.ADMIN]),
     (req: Request, res: Response, next: NextFunction) =>
         tenantController.getAll(req, res, next),
 );
