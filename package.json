@@ -4,6 +4,7 @@
     "description": "The user management service",
     "main": "index.js",
     "scripts": {
+        "build": "tsc",
         "dev": "cross-env NODE_ENV=development nodemon src/server.ts",
         "format:fix": "prettier . --write",
         "format:check": "prettier . --check",
