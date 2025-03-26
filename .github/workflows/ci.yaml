@@ -31,8 +31,7 @@ jobs:
 
             - name: Run tests with coverage
               run: |
-                  npm run test -- --maxWorkers=4
-                  # Or for Jest: npm run test -- --maxWorkers=4 --runInBand
+                  npm run test -- --maxWorkers=4 --runInBand
 
             - name: Build TypeScript
               run: npm run build
