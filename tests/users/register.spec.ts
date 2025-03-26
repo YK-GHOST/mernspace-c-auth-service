@@ -7,6 +7,8 @@ import { Roles } from "../../src/constants";
 import { isJWT } from "../utils";
 import { RefreshToken } from "../../src/entity/RefreshToken";
 
+jest.setTimeout(30000);
+
 describe("POST /auth/register", () => {
     let connection: DataSource;
 

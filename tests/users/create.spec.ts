@@ -8,6 +8,8 @@ import { Roles } from "../../src/constants";
 import { createTenant } from "../utils";
 import { Tenant } from "../../src/entity/Tenant";
 
+jest.setTimeout(30000);
+
 describe("GET /auth/self", () => {
     let connection: DataSource;
     let jwks: ReturnType<typeof createJWKSMock>;

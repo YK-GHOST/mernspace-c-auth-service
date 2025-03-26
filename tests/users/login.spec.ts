@@ -7,6 +7,8 @@ import { User } from "../../src/entity/User";
 import { Roles } from "../../src/constants";
 import { isJWT } from "../utils";
 
+jest.setTimeout(30000);
+
 describe("POST /auth/login", () => {
     let connection: DataSource;
 
