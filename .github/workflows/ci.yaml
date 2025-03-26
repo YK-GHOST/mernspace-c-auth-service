@@ -30,8 +30,7 @@ jobs:
               run: npm run lint:check
 
             - name: Run tests with coverage
-              run: |
-                  npm run test -- --maxWorkers=4 --runInBand
+              run: npm run test
 
             - name: Build TypeScript
               run: npm run build
