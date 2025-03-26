@@ -7,34 +7,29 @@ on:
         branches:
             - main
 jobs:
-    lint-and-test:
-        name: Lint and Test
+    build-and-test:
+        name: Build the project
         runs-on: ubuntu-latest
+        # if: github.event_name == 'pull_request'
         steps:
             - uses: actions/checkout@v3
-
-            - name: Cache node modules
-              uses: actions/cache@v3
-              with:
-                  path: |
-                      **/node_modules
-                      **/.cache
-                  key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-                  restore-keys: |
-                      ${{ runner.os }}-node-
-
             - name: Install dependencies
               run: npm ci
-
             - name: Run eslint
               run: npm run lint:check
-
-            - name: Run tests with coverage
+            - name: Test and coverage
               run: npm run test
-
-            - name: Build TypeScript
+              env:
+                  DB_HOST: ${{ secrets.TEST_DB_HOST }}
+                  DB_PORT: ${{ secrets.TEST_DB_PORT }}
+                  DB_USERNAME: ${{ secrets.TEST_DB_USERNAME }}
+                  DB_PASSWORD: ${{ secrets.TEST_DB_PASSWORD }}
+                  DB_NAME: ${{ secrets.TEST_DB_NAME }}
+                  REFRESH_TOKEN_SECRET: ${{ secrets.REFRESH_TOKEN_SECRET }}
+                  JWKS_URI: ${{ secrets.JWKS_URI }}
+                  PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+            - name: Build-ts
               run: npm run build
-
             - name: SonarCloud Scan
               uses: SonarSource/sonarcloud-github-action@master
               env:
