@@ -23,6 +23,7 @@
     "devDependencies": {
         "@eslint/js": "^9.16.0",
         "@types/bcrypt": "^5.0.2",
+        "@types/bcryptjs": "^3.0.0",
         "@types/cookie-parser": "^1.4.8",
         "@types/eslint__js": "^8.42.3",
         "@types/express": "^5.0.0",
@@ -52,7 +53,7 @@
     "dependencies": {
         "@types/jsonwebtoken": "^9.0.7",
         "@types/supertest": "^6.0.2",
-        "bcrypt": "^5.1.1",
+        "bcryptjs": "^3.0.2",
         "cookie-parser": "^1.4.7",
         "dotenv": "^16.4.7",
         "express": "^4.21.2",
